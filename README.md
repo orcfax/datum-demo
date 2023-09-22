@@ -1,6 +1,65 @@
-# Template repository
+# Orcfax Datum Demo
 
-Template repository for Python projects.
+Demonstration how to read an Orcfax Datum using PyCardano. The example reads
+an on-chain Datum via [Ogmios][ogmios-1] and logs various details about the
+Datum as it goes.
+
+Will work out of the box, and connects to Orcfax preprod smart contract
+address.
+
+[ogmios-1]: https://ogmios.dev/
+
+## Example output
+
+The output can be worked on as necessary. It currently looks as follows.
+
+<!-- markdownlint-disable-line-length MD013 -->
+```text
+2023-09-22T13:28:16Z INFO :: read_datum.py:197:read_datum() :: entering this script...
+2023-09-22T13:28:16Z INFO :: read_datum.py:198:read_datum() :: oracle smart contract: addr_test1wrtcecfy7np3sduzn99ffuv8qx2sa8v977l0xql8ca7lgkgmktuc0
+2023-09-22T13:28:19Z INFO :: read_datum.py:162:get_latest_utxo() :: inspecting '848' UTxOs
+2023-09-22T13:28:19Z INFO :: read_datum.py:65:display_utxo() :: (input) transaction id: 0ec260a31c937f73eca073867d79a6edcdda3bd1f966ab42714fc528b653f716
+2023-09-22T13:28:19Z INFO :: read_datum.py:66:display_utxo() :: (output) transaction addr: addr_test1wrtcecfy7np3sduzn99ffuv8qx2sa8v977l0xql8ca7lgkgmktuc0
+2023-09-22T13:28:19Z INFO :: read_datum.py:67:display_utxo() :: (output) datum cbor:
+
+590207d8799fa74840636f6e746578745268747470733a2f2f736368656d612e6f7267525f3a636f6e74656e745369676e61747572655840323639353835383434336164333935343064373161336538653562663632313161363738666339353539656639393166636565386634356330353838636362394a6964656e746966696572a34a70726f706572747949445041726b6c79204964656e74696669657244747970654d50726f706572747956616c75654576616c7565582f75726e3a6f72636661783a66333635323533622d353565662d346633622d383031372d613133666164333262313030446e616d654f4144412d5553447c5553442d41444144747970654d50726f706572747956616c75654576616c75659fd87c9f1a91d107c81bfffffffffffffff6ffd87c9f1b000e85b16ddaf53d1bfffffffffffffff1ffff4e76616c75655265666572656e63659fa34540747970654d50726f706572747956616c7565446e616d654976616c696446726f6d4576616c75651b0000018abc9b91d5a34540747970654d50726f706572747956616c7565446e616d654c76616c69645468726f7567684576616c75651b0000018abcd28055ff58203034434130303031484159395137564e4b534754514b3039324531544638445ad87a9f1b0000018abcd28055ff581c90b121aa6b689200adf7ed115040a96375d2b68e23633d6864c53a91ff
+
+2023-09-22T13:28:19Z INFO :: read_datum.py:70:display_utxo() :: (output) Tx cost: 3.42214 ADA
+2023-09-22T13:28:19Z INFO :: read_datum.py:137:decode_utxo() ::
+
+{
+  "@context": "https://schema.org",
+  "type": "PropertyValue",
+  "name": "ADA-USD|USD-ADA",
+  "value": [
+    0.24463953360000001,
+    4.087646772720957
+  ],
+  "valueReference": [
+    {
+      "@type": "PropertyValue",
+      "name": "validFrom",
+      "value": 1695381426645
+    },
+    {
+      "@type": "PropertyValue",
+      "name": "validThrough",
+      "value": 1695385026645
+    }
+  ],
+  "identifier": {
+    "propertyID": "Arkly Identifier",
+    "type": "PropertyValue",
+    "value": "urn:orcfax:f365253b-55ef-4f3b-8017-a13fad32b100"
+  },
+  "_:contentSignature": "2695858443ad39540d71a3e8e5bf6211a678fc9559ef991fcee8f45c0588ccb9"
+}
+
+2023-09-22T13:28:19Z INFO :: read_datum.py:138:decode_utxo() :: oracle datum identifier (internal): b'04CA0001HAY9Q7VNKSGTQK092E1TF8DZ'
+2023-09-22T13:28:19Z INFO :: read_datum.py:143:decode_utxo() :: oracle datum timestamp: 2023-09-22T12:17:06Z (1695385026645)
+2023-09-22T13:28:19Z INFO :: read_datum.py:156:pretty_log_value() :: ADA-USD: 0.24463953360000001
+2023-09-22T13:28:19Z INFO :: read_datum.py:156:pretty_log_value() :: USD-ADA: 4.087646772720957
+```
 
 ## Developer install
 
@@ -21,12 +80,6 @@ python -m pip install -r requirements/local.txt
 
 ```bash
 python -m tox
-```
-
-#### Run tests-only
-
-```bash
-python -m tox -e py3
 ```
 
 #### Run linting-only
@@ -50,54 +103,3 @@ be others suited to different projects. A list of other pre-commit hooks can be
 found [here][pre-commit-1].
 
 [pre-commit-1]: https://pre-commit.com/hooks.html
-
-## Packaging
-
-The `Makefile` contains helper functions for packaging and release.
-
-Makefile functions can be reviewed by calling `make`  from the root of this
-repository:
-
-```make
-clean                          Clean the package directory
-help                           Print this help message.
-package-check                  Check the distribution is valid
-package-deps                   Upgrade dependencies for packaging
-package-source                 Package the source code
-package-upload                 Upload package to pypi
-package-upload-test            Upload package to test.pypi
-tar-source                     Package repository as tar for easy distribution
-```
-
-### pyproject.toml
-
-Packaging consumes the metadata in `pyproject.toml` which helps to describe
-the project on the official [pypi.org][pypi-2] repository. Have a look at the
-documentation and comments there to help you create a suitably descriptive
-metadata file.
-
-### Local packaging
-
-To create a python wheel for testing locally, or distributing to colleagues
-run:
-
-* `make package-source`
-
-A `tar` and `whl` file will be stored in a `dist/` directory. The `whl` file
-can be installed as follows:
-
-* `pip install <your-package>.whl`
-
-### Publishing
-
-Publishing for public use can be achieved with:
-
-* `make package-upload-test` or `make package-upload`
-
-`make-package-upload-test` will upload the package to [test.pypi.org][pypi-1]
-which provides a way to look at package metadata and documentation and ensure
-that it is correct before uploading to the official [pypi.org][pypi-2]
-repository using `make package-upload`.
-
-[pypi-1]: https://test.pypi.org
-[pypi-2]: https://pypi.org

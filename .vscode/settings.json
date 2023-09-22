@@ -39,7 +39,16 @@
     },
     "files.eol": "\n",
     "cSpell.words": [
+        "apexpool",
+        "cbor",
         "gmtime",
-        "levelname"
+        "levelname",
+        "OGMIOS",
+        "Orcfax",
+        "preprod",
+        "pycardano",
+        "significand",
+        "utxo",
+        "utxos"
     ]
 }
