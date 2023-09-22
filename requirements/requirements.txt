@@ -1,1 +1,5 @@
 # requirements for the production project.
+
+numpy==1.25.2
+pycardano==0.9.0
+requests==2.31.0
