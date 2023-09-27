@@ -3,6 +3,7 @@
 import json
 import logging
 import sys
+import requests
 from collections import OrderedDict
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -11,14 +12,22 @@ from typing import Final
 import cbor2
 import numpy
 import pycardano
-from pycardano import Network, OgmiosChainContext
+from pycardano import Network, OgmiosChainContext, UTxO, Address
 
 OGMIOS_URL: Final[str] = "ws://137.184.172.9:1337"
+
+# plutus chain index api
+PLUTUS_CHAIN_INDEX_API: Final[str] = 'http://137.184.172.9:9084/tx'
 
 # smart contract
 ADA_USD_ORACLE_ADDR: Final[
     str
 ] = "addr_test1wrtcecfy7np3sduzn99ffuv8qx2sa8v977l0xql8ca7lgkgmktuc0"
+
+auth_addr = Address.from_primitive("addr_test1vrc7lrdcsz08vxuj4278aeyn4g82salal76l54gr6rw4ync86tfse")
+
+# policy ID for the Auth tokens
+AUTH_POLICY: Final[str] = "5ec8416ecd8af5fe338068b2aee00a028dc1f4c0cd5978fb86d7c038"
 
 network = Network.TESTNET
 context = OgmiosChainContext(ws_url=OGMIOS_URL, network=network)
@@ -156,6 +165,53 @@ def pretty_log_value(value_pair: cbor2.CBORTag, label: str):
     logger.info("%s: %s", label, value)
 
 
+def get_tx_info(tx_id: str):
+    """Return the transaction information from the plutus chain index api"""
+    data = {
+        "getTxId": tx_id
+    }
+    headers = {
+        "Content-type": "application/json"
+    }
+    try:
+        tx_info = json.loads(requests.post(PLUTUS_CHAIN_INDEX_API, json=data, headers=headers).text)
+    except Exception as e:
+        logger.exception(e)
+        tx_info = None
+    return tx_info
+
+
+def validate_utxo(utxo: UTxO):
+    """check if the token included in the utxo is the correct one."""
+    logger.info("inspecting the utxo for valid auth tokens")
+    valid = False
+    last_tx_info = get_tx_info(str(utxo.input.transaction_id))
+    last_tx_inputs = last_tx_info["_citxInputs"]
+    inputs = {}
+    # find out the inputs of the last publish transaction
+    for item in last_tx_inputs:
+        tx_id = item["txInRef"]["txOutRefId"]["getTxId"]
+        index = item["txInRef"]["txOutRefIdx"]
+        if tx_id not in inputs:
+            inputs[tx_id] = [index]
+        else:
+            inputs[tx_id].append(index)
+    # find out the addresses where the inputs are consumed from
+    for tx_id in inputs:
+        tx_info = get_tx_info(tx_id)
+        tx_outputs = tx_info["_citxOutputs"]
+        for index in inputs[tx_id]:
+            # if the input is from the AUTH address
+            if tx_outputs["contents"][index]["address"]["addressCredential"]["contents"]["getPubKeyHash"] \
+                    == str(auth_addr.payment_part):
+                for value in tx_outputs["contents"][index]["value"]["getValue"]:
+                    # if the token policy is the auth_policy (which doesn't change)
+                    if value[0]["unCurrencySymbol"] == AUTH_POLICY:
+                        valid = True
+                        logger.info("the utxo is valid, it contains the correct auth token")
+    return valid
+
+
 def get_latest_utxo(oracle_addr: str):
     """return the latest Orcfax UTxO from those found on-chain."""
     oracle_utxos = context.utxos(oracle_addr)
@@ -165,6 +221,7 @@ def get_latest_utxo(oracle_addr: str):
     for utxo in oracle_utxos:
         if utxo.output.script or not utxo.output.datum:
             continue
+
         oracle_datum = cbor2.loads(utxo.output.datum.cbor)
         try:
             timestamp = oracle_datum.value[2].value[0]
@@ -189,7 +246,10 @@ def get_latest_utxo(oracle_addr: str):
         logger.warning(
             "'%s' hours since datum was published (%s)", diff_hours, latest_timestamp
         )
-    return latest_utxo
+    if validate_utxo(latest_utxo):
+        return latest_utxo
+    else:
+        return None
 
 
 def read_datum():
