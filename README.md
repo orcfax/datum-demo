@@ -22,50 +22,53 @@ The current version of this script outputs as follows:
 
 <!-- markdownlint-disable-line-length MD013 -->
 ```text
-2023-09-22T13:28:16Z INFO :: read_datum.py:197:read_datum() :: entering this script...
-2023-09-22T13:28:16Z INFO :: read_datum.py:198:read_datum() :: oracle smart contract: addr_test1wrtcecfy7np3sduzn99ffuv8qx2sa8v977l0xql8ca7lgkgmktuc0
-2023-09-22T13:28:19Z INFO :: read_datum.py:162:get_latest_utxo() :: inspecting '848' UTxOs
-2023-09-22T13:28:19Z INFO :: read_datum.py:65:display_utxo() :: (input) transaction id: 0ec260a31c937f73eca073867d79a6edcdda3bd1f966ab42714fc528b653f716
-2023-09-22T13:28:19Z INFO :: read_datum.py:66:display_utxo() :: (output) transaction addr: addr_test1wrtcecfy7np3sduzn99ffuv8qx2sa8v977l0xql8ca7lgkgmktuc0
-2023-09-22T13:28:19Z INFO :: read_datum.py:67:display_utxo() :: (output) datum cbor:
+2023-09-28T16:24:13Z INFO :: read_datum.py:264:read_datum() :: entering this script...
+2023-09-28T16:24:13Z INFO :: read_datum.py:265:read_datum() :: oracle smart contract: addr_test1wrtcecfy7np3sduzn99ffuv8qx2sa8v977l0xql8ca7lgkgmktuc0
+2023-09-28T16:24:15Z INFO :: read_datum.py:226:get_latest_utxo() :: inspecting '862' UTxOs
+2023-09-28T16:24:15Z WARNING :: read_datum.py:254:get_latest_utxo() :: '7.00' hours since datum was published (1695943470811)
+2023-09-28T16:24:15Z INFO :: read_datum.py:191:validate_utxo() :: inspecting the utxo for valid auth tokens
+2023-09-28T16:24:15Z INFO :: read_datum.py:217:validate_utxo() :: the utxo is valid, it contains the correct auth token
+2023-09-28T16:24:15Z INFO :: read_datum.py:79:display_utxo() :: (input) transaction id: 078d548b0ed91b95164d0baaf2b486161e06aab84483d99ed01a2180090ab0f3
+2023-09-28T16:24:15Z INFO :: read_datum.py:80:display_utxo() :: (output) transaction addr: addr_test1wrtcecfy7np3sduzn99ffuv8qx2sa8v977l0xql8ca7lgkgmktuc0
+2023-09-28T16:24:15Z INFO :: read_datum.py:81:display_utxo() :: (output) datum cbor:
 
-590207d8799fa74840636f6e746578745268747470733a2f2f736368656d612e6f7267525f3a636f6e74656e745369676e61747572655840323639353835383434336164333935343064373161336538653562663632313161363738666339353539656639393166636565386634356330353838636362394a6964656e746966696572a34a70726f706572747949445041726b6c79204964656e74696669657244747970654d50726f706572747956616c75654576616c7565582f75726e3a6f72636661783a66333635323533622d353565662d346633622d383031372d613133666164333262313030446e616d654f4144412d5553447c5553442d41444144747970654d50726f706572747956616c75654576616c75659fd87c9f1a91d107c81bfffffffffffffff6ffd87c9f1b000e85b16ddaf53d1bfffffffffffffff1ffff4e76616c75655265666572656e63659fa34540747970654d50726f706572747956616c7565446e616d654976616c696446726f6d4576616c75651b0000018abc9b91d5a34540747970654d50726f706572747956616c7565446e616d654c76616c69645468726f7567684576616c75651b0000018abcd28055ff58203034434130303031484159395137564e4b534754514b3039324531544638445ad87a9f1b0000018abcd28055ff581c90b121aa6b689200adf7ed115040a96375d2b68e23633d6864c53a91ff
+590207d8799fa74840636f6e746578745268747470733a2f2f736368656d612e6f7267525f3a636f6e74656e745369676e61747572655840343033333066663235393763333939646461616162366331646261616235323137336566383262663766303864336361383435383561623565373634323961304a6964656e746966696572a34a70726f706572747949445041726b6c79204964656e74696669657244747970654d50726f706572747956616c75654576616c7565582f75726e3a6f72636661783a34616531303634302d313062392d346332332d616631642d633461396462643839333864446e616d654f4144412d5553447c5553442d41444144747970654d50726f706572747956616c75654576616c75659fd87c9f1a0003ce971bfffffffffffffffaffd87c9f1b000e3d57a771924e1bfffffffffffffff1ffff4e76616c75655265666572656e63659fa34540747970654d50726f706572747956616c7565446e616d654976616c696446726f6d4576616c75651b0000018adde4c05ba34540747970654d50726f706572747956616c7565446e616d654c76616c69645468726f7567684576616c75651b0000018ade1baedbff5820303443413030303148424559394b4b34343950314345513850483744544a5954d87a9f1b0000018ade1baedbff581c90b121aa6b689200adf7ed115040a96375d2b68e23633d6864c53a91ff
 
-2023-09-22T13:28:19Z INFO :: read_datum.py:70:display_utxo() :: (output) Tx cost: 3.42214 ADA
-2023-09-22T13:28:19Z INFO :: read_datum.py:137:decode_utxo() ::
+2023-09-28T16:24:15Z INFO :: read_datum.py:84:display_utxo() :: (output) Tx cost: 3.42214 ADA
+2023-09-28T16:24:15Z INFO :: read_datum.py:151:decode_utxo() ::
 
 {
   "@context": "https://schema.org",
   "type": "PropertyValue",
   "name": "ADA-USD|USD-ADA",
   "value": [
-    0.24463953360000001,
-    4.087646772720957
+    0.249495,
+    4.008096354636367
   ],
   "valueReference": [
     {
       "@type": "PropertyValue",
       "name": "validFrom",
-      "value": 1695381426645
+      "value": 1695939870811
     },
     {
       "@type": "PropertyValue",
       "name": "validThrough",
-      "value": 1695385026645
+      "value": 1695943470811
     }
   ],
   "identifier": {
     "propertyID": "Arkly Identifier",
     "type": "PropertyValue",
-    "value": "urn:orcfax:f365253b-55ef-4f3b-8017-a13fad32b100"
+    "value": "urn:orcfax:4ae10640-10b9-4c23-af1d-c4a9dbd8938d"
   },
-  "_:contentSignature": "2695858443ad39540d71a3e8e5bf6211a678fc9559ef991fcee8f45c0588ccb9"
+  "_:contentSignature": "40330ff2597c399ddaaab6c1dbaab52173ef82bf7f08d3ca84585ab5e76429a0"
 }
 
-2023-09-22T13:28:19Z INFO :: read_datum.py:138:decode_utxo() :: oracle datum identifier (internal): b'04CA0001HAY9Q7VNKSGTQK092E1TF8DZ'
-2023-09-22T13:28:19Z INFO :: read_datum.py:143:decode_utxo() :: oracle datum timestamp: 2023-09-22T12:17:06Z (1695385026645)
-2023-09-22T13:28:19Z INFO :: read_datum.py:156:pretty_log_value() :: ADA-USD: 0.24463953360000001
-2023-09-22T13:28:19Z INFO :: read_datum.py:156:pretty_log_value() :: USD-ADA: 4.087646772720957
+2023-09-28T16:24:15Z INFO :: read_datum.py:152:decode_utxo() :: oracle datum identifier (internal): b'04CA0001HBEY9KK449P1CEQ8PH7DTJYT'
+2023-09-28T16:24:15Z INFO :: read_datum.py:157:decode_utxo() :: oracle datum timestamp: 2023-09-28T23:24:30Z (1695943470811)
+2023-09-28T16:24:15Z INFO :: read_datum.py:170:pretty_log_value() :: ADA-USD: 0.249495
+2023-09-28T16:24:15Z INFO :: read_datum.py:170:pretty_log_value() :: USD-ADA: 4.008096354636367
 ```
 
 ## Developer install
