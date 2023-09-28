@@ -1,7 +1,7 @@
 # Orcfax Datum Demo
 
-This repo contains a demonstration Python script (`read_datum.py`) that will
-read an on-chain Orcfax Datum using PyCardano.
+This repo contains a demonstration Python script
+[`read_datum.py`](read_datum.py) that will read an on-chain Orcfax Datum using PyCardano.
 
 This example reads an on-chain Datum via our PreProd Testnet [Ogmios][ogmios-1] server. It converts the Cardano transaction's CBOR serialization to human and machine-readable JSON and then logs various details about the Datum as it goes.
 
@@ -16,7 +16,8 @@ below. It connects to the Orcfax Preprod smart contract address for our
 PyCardano makes it easy to tweak the configuration in
 [`read_datum.py`](read_datum.py) to experiment with your own outputs and give
 you ideas on how to incorporate our decentralized oracle price feed data in your
-own dApps.
+own dApps. When you're ready, you can point it at your own Mainnet Ogmios
+server.
 
 The current version of this script outputs as follows:
 
@@ -70,6 +71,28 @@ The current version of this script outputs as follows:
 2023-09-28T16:24:15Z INFO :: read_datum.py:170:pretty_log_value() :: ADA-USD: 0.249495
 2023-09-28T16:24:15Z INFO :: read_datum.py:170:pretty_log_value() :: USD-ADA: 4.008096354636367
 ```
+### Deeper context
+The on-chain datum that the Orcfax oracle publishes contain identifiers that
+resolve to audit log packages on the decentralized
+[Arweave.org](https://arweave.org) network.
+
+```
+"identifier": {
+    "propertyID": "Arkly Identifier",
+    "type": "PropertyValue",
+    "value": "urn:orcfax:4ae10640-10b9-4c23-af1d-c4a9dbd8938d"
+```
+
+These standards-compliant packages are prepared using the
+[Arkly.io](https://arkly.io/about/) decentralized archiving platform and provide
+context about the provenance, collection and validation of the Orcfax fact
+statements to ensure their authenticity and accuracy.
+
+The Orcfax project provides a convenient
+[Explorer](https://explorer.orcfax.io/9be76e97-aaf6-47c2-bea1-97db1552e421) to search all the audit packages for its published Mainnet datum. They are marked
+up as Schema.org JSON-LD for machine-readable re-use.
+
+![Orcfax Explorer example](orcfax-explorer-sample.png)
 
 ## Developer install
 
