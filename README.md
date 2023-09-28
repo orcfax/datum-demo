@@ -1,17 +1,24 @@
 # Orcfax Datum Demo
 
-Demonstration how to read an Orcfax Datum using PyCardano. The example reads
-an on-chain Datum via [Ogmios][ogmios-1] and logs various details about the
-Datum as it goes.
+This repo contains a demonstration Python script (`read_datum.py`) that will
+read an on-chain Orcfax Datum using PyCardano.
 
-Will work out of the box, and connects to Orcfax preprod smart contract
-address.
+This example reads an on-chain Datum via our PreProd Testnet [Ogmios][ogmios-1] server. It converts the Cardano transaction's CBOR serialization to human and machine-readable JSON and then logs various details about the Datum as it goes.
+
+This script will work out of the box using the Developer Install instructions
+below. It connects to the Orcfax Preprod smart contract address for our
+`ADA-USD|USD-ADA` feed.
 
 [ogmios-1]: https://ogmios.dev/
 
 ## Example output
 
-The output can be worked on as necessary. It currently looks as follows.
+PyCardano makes it easy to tweak the configuration in
+[`read_datum.py`](read_datum.py) to experiment with your own outputs and give
+you ideas on how to incorporate our decentralized oracle price feed data in your
+own dApps.
+
+The current version of this script outputs as follows:
 
 <!-- markdownlint-disable-line-length MD013 -->
 ```text
@@ -103,3 +110,9 @@ be others suited to different projects. A list of other pre-commit hooks can be
 found [here][pre-commit-1].
 
 [pre-commit-1]: https://pre-commit.com/hooks.html
+
+## Run the PreProd script
+
+```bash
+python read_datum.py
+```
