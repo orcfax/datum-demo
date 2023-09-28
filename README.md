@@ -84,13 +84,14 @@ resolve to audit log packages on the decentralized
 ```
 
 These standards-compliant packages are prepared using the
-[Arkly.io](https://arkly.io/about/) decentralized archiving platform and provide
+[Arkly.io](http://arkly.io/about/) decentralized archiving platform and provide
 context about the provenance, collection and validation of the Orcfax fact
 statements to ensure their authenticity and accuracy.
 
 The Orcfax project provides a convenient
 [Explorer](https://explorer.orcfax.io/9be76e97-aaf6-47c2-bea1-97db1552e421) to search all the audit packages for its published Mainnet datum. They are marked
-up as Schema.org JSON-LD for machine-readable re-use.
+up as [Schema.org](https://schema.org/Claim) [JSON-LD](https://json-ld.org/) for
+machine-readable re-use.
 
 ![Orcfax Explorer example](orcfax-explorer-sample.png)
 
