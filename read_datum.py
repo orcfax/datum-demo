@@ -12,15 +12,9 @@ from typing import Final
 import cbor2
 import numpy
 import pycardano
-import requests
 from pycardano import Address, Network, OgmiosChainContext, UTxO
 
 OGMIOS_URL: Final[str] = "ws://ogmios.preprod.orcfax.io:1337"
-
-# plutus chain index api
-PLUTUS_CHAIN_INDEX_API: Final[
-    str
-] = "http://plutus-chain-index.preprod.orcfax.io:9084/tx"
 
 # smart contract
 ADA_USD_ORACLE_ADDR: Final[
@@ -32,7 +26,7 @@ auth_addr = Address.from_primitive(
 )
 
 # policy ID for the Auth tokens
-AUTH_POLICY: Final[str] = "5ec8416ecd8af5fe338068b2aee00a028dc1f4c0cd5978fb86d7c038"
+AUTH_POLICY: Final[str] = "104d51dd927761bf5d50d32e1ede4b2cff477d475fe32f4f780a4b21"
 
 network = Network.TESTNET
 context = OgmiosChainContext(ws_url=OGMIOS_URL, network=network)
@@ -170,53 +164,16 @@ def pretty_log_value(value_pair: cbor2.CBORTag, label: str):
     logger.info("%s: %s", label, value)
 
 
-def get_tx_info(tx_id: str):
-    """Return the transaction information from the plutus chain index api"""
-    data = {"getTxId": tx_id}
-    headers = {"Content-type": "application/json"}
-    try:
-        tx_info = json.loads(
-            requests.post(
-                PLUTUS_CHAIN_INDEX_API, json=data, headers=headers, timeout=30
-            ).text
-        )
-    except Exception as exc:
-        logger.exception(exc)
-        tx_info = None
-    return tx_info
-
-
 def validate_utxo(utxo: UTxO):
     """check if the token included in the utxo is the correct one."""
     logger.info("inspecting the utxo for valid auth tokens")
     valid = False
-    last_tx_info = get_tx_info(str(utxo.input.transaction_id))
-    last_tx_inputs = last_tx_info["_citxInputs"]
-    inputs = {}
-    # find out the inputs of the last publish transaction
-    for item in last_tx_inputs:
-        tx_id = item["txInRef"]["txOutRefId"]["getTxId"]
-        index = item["txInRef"]["txOutRefIdx"]
-        if tx_id not in inputs:
-            inputs[tx_id] = [index]
-        else:
-            inputs[tx_id].append(index)
-    # find out the addresses where the inputs are consumed from
-    for tx_id in inputs:
-        tx_info = get_tx_info(tx_id)
-        tx_outputs = tx_info["_citxOutputs"]
-        for index in inputs[tx_id]:
-            # if the input is from the AUTH address
-            if tx_outputs["contents"][index]["address"]["addressCredential"][
-                "contents"
-            ]["getPubKeyHash"] == str(auth_addr.payment_part):
-                for value in tx_outputs["contents"][index]["value"]["getValue"]:
-                    # if the token policy is the auth_policy (which doesn't change)
-                    if value[0]["unCurrencySymbol"] == AUTH_POLICY:
-                        valid = True
-                        logger.info(
-                            "the utxo is valid, it contains the correct auth token"
-                        )
+    for item in utxo.output.amount.multi_asset:
+        if str(item) == AUTH_POLICY:
+            valid = True
+            for asset in utxo.output.amount.multi_asset[item]:
+                amount = utxo.output.amount.multi_asset[item][asset]
+                logger.info("found %d %s", amount, str(asset))
     return valid
 
 
