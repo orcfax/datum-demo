@@ -71,12 +71,14 @@ The current version of this script outputs as follows:
 2023-09-28T16:24:15Z INFO :: read_datum.py:170:pretty_log_value() :: ADA-USD: 0.249495
 2023-09-28T16:24:15Z INFO :: read_datum.py:170:pretty_log_value() :: USD-ADA: 4.008096354636367
 ```
+
 ### Deeper context
+
 The on-chain datum that the Orcfax oracle publishes contain identifiers that
 resolve to audit log packages on the decentralized
 [Arweave.org](https://arweave.org) network.
 
-```
+```json
 "identifier": {
     "propertyID": "Arkly Identifier",
     "type": "PropertyValue",
